@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {makeStyles} from '@mui/styles/'
 import { Grid } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import EmptyTaskBoardSpiel from '../components/EmptyTaskBoardSpiel';
 import AddListTemplate from '../components/AddListTemplate';
+import axios from 'axios';
 
 const useStyles = makeStyles({
     rootGrid: ({mobile}) => ({
@@ -34,7 +35,20 @@ const useStyles = makeStyles({
 const TaskBoardPage = () => {
     const mobile = useMediaQuery('(max-width:600px)');
     const classes = useStyles({mobile});
+    
     //fetch all lists on mount
+    useEffect(()=>{
+        const fetchLists = async () => {
+            try {
+                const result = await axios.get('http://localhost:4000/api/lists');
+                console.log(result.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchLists();
+    },[]);
+
     return (
         <Grid className={classes.rootGrid} container direction={mobile ? 'column' : 'row'}>
             <Grid className={classes.dockedContainer} xs={2} sm={3} item >
