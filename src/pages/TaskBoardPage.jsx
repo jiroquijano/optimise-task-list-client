@@ -3,6 +3,7 @@ import {makeStyles} from '@mui/styles/'
 import { Grid } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import EmptyTaskBoardSpiel from '../components/EmptyTaskBoardSpiel';
+import AddListTemplate from '../components/AddListTemplate';
 
 const useStyles = makeStyles({
     rootGrid: ({mobile}) => ({
@@ -31,15 +32,13 @@ const useStyles = makeStyles({
 });
 
 const TaskBoardPage = () => {
-    const mobile = useMediaQuery('(max-width:600px)')
+    const mobile = useMediaQuery('(max-width:600px)');
     const classes = useStyles({mobile});
     //fetch all lists on mount
     return (
         <Grid className={classes.rootGrid} container direction={mobile ? 'column' : 'row'}>
             <Grid className={classes.dockedContainer} xs={2} sm={3} item >
-                <div>
-                    {mobile? 'MOBILE': 'NOTMOBILE'}
-                </div>
+                {!mobile && <AddListTemplate/>}
             </Grid>
             <Grid className={classes.taskBoardContainer} xs={10} sm={9} item>
                 <EmptyTaskBoardSpiel/>
