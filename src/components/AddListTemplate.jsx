@@ -7,7 +7,7 @@ import { Input } from '@mui/material';
 const useStyles = makeStyles({
     root: {
         display: 'flex',
-        height: '40%',
+        height: '20rem',
         width: '80%',
         background: '#4D4D4D',
         border: 'dashed 2px #00CCCC',

@@ -1,10 +1,12 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@mui/styles/'
 import { Grid } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import EmptyTaskBoardSpiel from '../components/EmptyTaskBoardSpiel';
 import AddListTemplate from '../components/AddListTemplate';
+import TaskBoard from '../components/TaskBoard/TaskBoard';
 import axios from 'axios';
+import _ from 'lodash';
 
 const useStyles = makeStyles({
     rootGrid: ({mobile}) => ({
@@ -22,26 +24,27 @@ const useStyles = makeStyles({
         borderBottom: mobile ? 'solid 2px #2E2E2E' : '',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: mobile ? 'flex-end':'center'
     }),
     taskBoardContainer: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%'
+        width: '100%',
+        height: '100%'
     }
 });
 
 const TaskBoardPage = () => {
     const mobile = useMediaQuery('(max-width:600px)');
     const classes = useStyles({mobile});
+    const [taskLists, setTaskLists] = useState([]); //temporary
     
-    //fetch all lists on mount
     useEffect(()=>{
         const fetchLists = async () => {
             try {
                 const result = await axios.get('http://localhost:4000/api/lists');
-                console.log(result.data);
+                setTaskLists([...result.data]);
             } catch (error) {
                 console.log(error);
             }
@@ -52,10 +55,19 @@ const TaskBoardPage = () => {
     return (
         <Grid className={classes.rootGrid} container direction={mobile ? 'column' : 'row'}>
             <Grid className={classes.dockedContainer} xs={2} sm={3} item >
-                {!mobile && <AddListTemplate/>}
+                {mobile ? <div>mobile</div> : <AddListTemplate/>}
             </Grid>
             <Grid className={classes.taskBoardContainer} xs={10} sm={9} item>
-                <EmptyTaskBoardSpiel/>
+                {
+                    _.isEmpty(taskLists) ? 
+                    (
+                        <EmptyTaskBoardSpiel/>
+                    ):(
+                        <TaskBoard
+                            taskLists={taskLists}
+                        />
+                    )
+                }
             </Grid>
         </Grid>
     )
