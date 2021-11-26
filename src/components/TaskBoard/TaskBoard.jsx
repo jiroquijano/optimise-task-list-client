@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import TaskList from './TaskList';
+import List from './List';
 import TaskBoardContext from '../../context/TaskBoardContext';
 import { Grid } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -12,7 +12,7 @@ const TaskBoard = () => {
             {
                 taskLists.map((list)=>{
                     return (
-                        <TaskList
+                        <List
                             key={list._id}
                             id={list._id}
                             listName={list.name}
