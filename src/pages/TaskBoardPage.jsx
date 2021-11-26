@@ -1,12 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer} from 'react';
+import axios from 'axios';
+import _ from 'lodash';
 import {makeStyles} from '@mui/styles/'
 import { Grid } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import EmptyTaskBoardSpiel from '../components/EmptyTaskBoardSpiel';
 import AddListTemplate from '../components/AddListTemplate';
 import TaskBoard from '../components/TaskBoard/TaskBoard';
-import axios from 'axios';
-import _ from 'lodash';
+import TaskBoardContext from '../context/TaskBoardContext';
+import taskBoardReducer from '../reducers/taskBoardReducer';
 
 const useStyles = makeStyles({
     rootGrid: ({mobile}) => ({
@@ -31,20 +33,25 @@ const useStyles = makeStyles({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
-        height: '100%'
+        height: '100%',
+        overflow: 'auto',
+        padding: '20px'
     }
 });
 
 const TaskBoardPage = () => {
     const mobile = useMediaQuery('(max-width:600px)');
     const classes = useStyles({mobile});
-    const [taskLists, setTaskLists] = useState([]); //temporary
+    const [taskLists, taskBoardDispatch] = useReducer(taskBoardReducer, []);
     
     useEffect(()=>{
         const fetchLists = async () => {
             try {
                 const result = await axios.get('http://localhost:4000/api/lists');
-                setTaskLists([...result.data]);
+                taskBoardDispatch({
+                    type: 'POPULATE_TASK_LISTS',
+                    taskLists: result.data
+                });
             } catch (error) {
                 console.log(error);
             }
@@ -53,23 +60,23 @@ const TaskBoardPage = () => {
     },[]);
 
     return (
-        <Grid className={classes.rootGrid} container direction={mobile ? 'column' : 'row'}>
-            <Grid className={classes.dockedContainer} xs={2} sm={3} item >
-                {mobile ? <div>mobile</div> : <AddListTemplate/>}
+        <TaskBoardContext.Provider value={{taskLists, taskBoardDispatch}}>
+            <Grid className={classes.rootGrid} container direction={mobile ? 'column' : 'row'}>
+                <Grid className={classes.dockedContainer} xs={2} sm={3} item >
+                    {mobile ? <div>mobile</div> : <AddListTemplate/>}
+                </Grid>
+                <Grid className={classes.taskBoardContainer} xs={10} sm={9} container item>
+                    {
+                        _.isEmpty(taskLists) ?
+                        (
+                            <EmptyTaskBoardSpiel/>
+                        ):(
+                            <TaskBoard/>
+                        )
+                    }
+                </Grid>
             </Grid>
-            <Grid className={classes.taskBoardContainer} xs={10} sm={9} item>
-                {
-                    _.isEmpty(taskLists) ? 
-                    (
-                        <EmptyTaskBoardSpiel/>
-                    ):(
-                        <TaskBoard
-                            taskLists={taskLists}
-                        />
-                    )
-                }
-            </Grid>
-        </Grid>
+        </TaskBoardContext.Provider>
     )
 }
 
