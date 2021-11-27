@@ -42,7 +42,7 @@ const useStyles = makeStyles({
 const TaskBoardPage = () => {
     const mobile = useMediaQuery('(max-width:600px)');
     const classes = useStyles({mobile});
-    const [taskLists, taskBoardDispatch] = useReducer(taskBoardReducer, []);
+    const [taskBoard, taskBoardDispatch] = useReducer(taskBoardReducer, {taskLists:[], tasksSelected:[]});
     
     useEffect(()=>{
         const fetchLists = async () => {
@@ -60,14 +60,18 @@ const TaskBoardPage = () => {
     },[]);
 
     return (
-        <TaskBoardContext.Provider value={{taskLists, taskBoardDispatch}}>
+        <TaskBoardContext.Provider value={{
+            taskLists: taskBoard.taskLists,
+            tasksSelected: taskBoard.tasksSelected,
+            taskBoardDispatch
+        }}>
             <Grid className={classes.rootGrid} container direction={mobile ? 'column' : 'row'}>
                 <Grid className={classes.dockedContainer} xs={2} sm={3} item >
                     {mobile ? <div>mobile</div> : <AddListTemplate/>}
                 </Grid>
                 <Grid className={classes.taskBoardContainer} xs={10} sm={9} container item>
                     {
-                        _.isEmpty(taskLists) ?
+                        _.isEmpty(taskBoard.taskLists) ?
                         (
                             <EmptyTaskBoardSpiel/>
                         ):(

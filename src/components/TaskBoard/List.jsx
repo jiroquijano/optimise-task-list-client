@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Task from './Task';
 import { Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
+import TaskBoardContext from '../../context/TaskBoardContext';
+import _ from 'lodash';
 
 const useStyles = makeStyles({
     taskListRoot: {
@@ -22,7 +24,7 @@ const useStyles = makeStyles({
         justifyContent: 'flex-start',
         alignItems: 'center',
         fontSize: '30px',
-        fontFamily: 'Avenir',
+        fontFamily: 'Roboto',
         paddingLeft: '10px'
     },
     listHeaderAddIconContainer: {
@@ -40,11 +42,16 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'flex-end',
         alignItems: 'center'
+    },
+    moveSpiel:{
+        fontWeight: 'bold',
+        cursor: 'pointer'
     }
 });
 
 const List = ({listName, tasks, id}) => {
     const classes = useStyles();
+    const {tasksSelected} = useContext(TaskBoardContext);
     return (
         <Grid item>
             <div className={classes.taskListRoot}>
@@ -55,7 +62,10 @@ const List = ({listName, tasks, id}) => {
                             {listName}
                         </Grid>
                         <Grid className={classes.listHeaderAddIconContainer} item xs={3}>
-                            <AddCircleOutlineIcon sx={{ color: '#000000', fontSize: '3rem', cursor: 'pointer'}}/>
+                            {
+                                _.isEmpty(tasksSelected) &&
+                                <AddCircleOutlineIcon sx={{ color: '#D6B656', fontSize: '3rem', cursor: 'pointer'}}/>
+                            }
                         </Grid>
                     </Grid>
 
@@ -77,10 +87,16 @@ const List = ({listName, tasks, id}) => {
                     </Grid>
 
                     <Grid className={classes.listFooter} container item xs={1}>
-                        <Grid item>
-                            <DeleteIcon 
-                                sx={{color: '#000000', fontSize: '3rem', cursor: 'pointer'}}
-                            />
+                        <Grid container direction='row' item justifyContent='flex-end' alignItems='center'>
+                            {
+                                _.isEmpty(tasksSelected) ? (
+                                    <DeleteIcon 
+                                        sx={{color: '#000000', fontSize: '3rem', cursor: 'pointer'}}
+                                    />
+                                ):(
+                                    <div className={classes.moveSpiel}>Move Here</div>
+                                )
+                            }
                         </Grid>
                     </Grid>
                 </Grid>
