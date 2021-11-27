@@ -9,6 +9,7 @@ import AddListTemplate from '../components/AddListTemplate';
 import TaskBoard from '../components/TaskBoard/TaskBoard';
 import TaskBoardContext from '../context/TaskBoardContext';
 import taskBoardReducer from '../reducers/taskBoardReducer';
+import taskBoardService from '../services/taskBoardService';
 
 const useStyles = makeStyles({
     rootGrid: ({mobile}) => ({
@@ -45,18 +46,14 @@ const TaskBoardPage = () => {
     const [taskBoard, taskBoardDispatch] = useReducer(taskBoardReducer, {taskLists:[], tasksSelected:[]});
     
     useEffect(()=>{
-        const fetchLists = async () => {
-            try {
-                const result = await axios.get('http://localhost:4000/api/lists');
-                taskBoardDispatch({
-                    type: 'POPULATE_TASK_LISTS',
-                    taskLists: result.data
-                });
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchLists();
+        const fetchAllLists = async () => {
+            const result = await taskBoardService.fetchAllLists();
+            taskBoardDispatch({
+                type: 'POPULATE_TASK_LISTS',
+                taskLists: result.data
+            });
+        };
+        fetchAllLists();
     },[]);
 
     return (

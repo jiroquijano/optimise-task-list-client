@@ -52,6 +52,9 @@ const useStyles = makeStyles({
 const List = ({listName, tasks, id}) => {
     const classes = useStyles();
     const {tasksSelected} = useContext(TaskBoardContext);
+    const moveTaskHandler = () => {
+        
+    }
     return (
         <Grid item>
             <div className={classes.taskListRoot}>
@@ -94,7 +97,12 @@ const List = ({listName, tasks, id}) => {
                                         sx={{color: '#000000', fontSize: '3rem', cursor: 'pointer'}}
                                     />
                                 ):(
-                                    <div className={classes.moveSpiel}>Move Here</div>
+                                    <div
+                                        onClick={moveTaskHandler} 
+                                        className={classes.moveSpiel}
+                                    >
+                                        Move Here
+                                    </div>
                                 )
                             }
                         </Grid>
