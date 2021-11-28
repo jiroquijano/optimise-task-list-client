@@ -7,6 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import Checkbox from '@mui/material/Checkbox';
 import TaskBoardContext from '../../context/TaskBoardContext';
 import _ from 'lodash';
+import EditTaskModal from '../Modals/EditTaskModal';
 
 const useStyles = makeStyles({
     taskRoot: {
@@ -55,17 +56,21 @@ const Task = ({id, taskName, description, deadline, state:taskState}) => {
     const [isSelected, setSelected] = useState(false);
     const {tasksSelected, taskBoardDispatch} = useContext(TaskBoardContext);
     const classes = useStyles({taskState});
+    const [isEditTaskOpen, setEditTaskOpen] = useState(false);
 
     const handleTaskSelection = () => {
         taskBoardDispatch({
             type: isSelected ? 'REMOVE_TASK_SELECTED' : 'ADD_TASK_SELECTED', //remove if currently selected, add if not
             taskId: id
         });
-        setSelected(!isSelected); //toggle selected
+        setSelected(!isSelected);
     }
 
     const handleTaskEdit = () => {
-        if(!isSelected) console.log('Edit is allowed!')
+        if(!isSelected){
+            console.log('Edit is allowed!');
+            setEditTaskOpen(true);
+        } 
     }
 
     const handleTaskDelete = () => {
@@ -119,6 +124,11 @@ const Task = ({id, taskName, description, deadline, state:taskState}) => {
                     </Grid>
                 </Grid>
             </div>
+            <EditTaskModal 
+                isOpen={isEditTaskOpen}
+                setModalOpen={setEditTaskOpen}
+                task={{taskName, id, description, deadline}}
+            />
         </Grid>
     )
 }

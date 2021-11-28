@@ -42,7 +42,10 @@ const useStyles = makeStyles({
 const TaskBoardPage = () => {
     const mobile = useMediaQuery('(max-width:600px)');
     const classes = useStyles({mobile});
-    const [taskBoard, taskBoardDispatch] = useReducer(taskBoardReducer, {taskLists:[], tasksSelected:[]});
+    const [taskBoard, taskBoardDispatch] = useReducer(taskBoardReducer, {
+        taskLists:[],
+        tasksSelected:[]
+    });
     
     useEffect(()=>{
         const fetchAllLists = async () => {

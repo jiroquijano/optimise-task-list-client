@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import Task from './Task';
 import { Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -7,6 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import TaskBoardContext from '../../context/TaskBoardContext';
 import _ from 'lodash';
 import taskBoardService from '../../services/taskBoardService';
+import AddTaskModal from '../Modals/AddTaskModal';
 
 const useStyles = makeStyles({
     taskListRoot: {
@@ -53,6 +54,7 @@ const useStyles = makeStyles({
 const List = ({listName, tasks, id}) => {
     const classes = useStyles();
     const {tasksSelected, taskBoardDispatch} = useContext(TaskBoardContext);
+    const [isAddTaskOpen, setAddTaskOpen] = useState(false);
 
     const deleteListHandler = async () => {
         const {data} = await taskBoardService.deleteList(listName);
@@ -60,6 +62,10 @@ const List = ({listName, tasks, id}) => {
             type: 'DELETE_LIST',
             listName: data.name
         });
+    }
+
+    const addTaskHandler = async () => {
+       setAddTaskOpen(true);
     }
 
     const moveTaskHandler = () => {
@@ -78,7 +84,10 @@ const List = ({listName, tasks, id}) => {
                         <Grid className={classes.listHeaderAddIconContainer} item xs={3}>
                             {
                                 _.isEmpty(tasksSelected) &&
-                                <AddCircleOutlineIcon sx={{ color: '#D6B656', fontSize: '3rem', cursor: 'pointer'}}/>
+                                <AddCircleOutlineIcon
+                                    sx={{ color: '#D6B656', fontSize: '3rem', cursor: 'pointer'}}
+                                    onClick={addTaskHandler}
+                                />
                             }
                         </Grid>
                     </Grid>
@@ -121,6 +130,11 @@ const List = ({listName, tasks, id}) => {
                     </Grid>
                 </Grid>
             </div>
+            <AddTaskModal 
+                isOpen={isAddTaskOpen}
+                setModalOpen={setAddTaskOpen}
+                listName={listName}
+            />
         </Grid>
     );
 }
