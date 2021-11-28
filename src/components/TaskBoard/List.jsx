@@ -6,6 +6,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TaskBoardContext from '../../context/TaskBoardContext';
 import _ from 'lodash';
+import taskBoardService from '../../services/taskBoardService';
 
 const useStyles = makeStyles({
     taskListRoot: {
@@ -51,10 +52,20 @@ const useStyles = makeStyles({
 
 const List = ({listName, tasks, id}) => {
     const classes = useStyles();
-    const {tasksSelected} = useContext(TaskBoardContext);
-    const moveTaskHandler = () => {
-        
+    const {tasksSelected, taskBoardDispatch} = useContext(TaskBoardContext);
+
+    const deleteListHandler = async () => {
+        const {data} = await taskBoardService.deleteList(listName);
+        taskBoardDispatch({
+            type: 'DELETE_LIST',
+            listName: data.name
+        });
     }
+
+    const moveTaskHandler = () => {
+
+    }
+
     return (
         <Grid item>
             <div className={classes.taskListRoot}>
@@ -95,6 +106,7 @@ const List = ({listName, tasks, id}) => {
                                 _.isEmpty(tasksSelected) ? (
                                     <DeleteIcon 
                                         sx={{color: '#000000', fontSize: '3rem', cursor: 'pointer'}}
+                                        onClick={deleteListHandler}
                                     />
                                 ):(
                                     <div

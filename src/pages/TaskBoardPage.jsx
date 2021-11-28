@@ -1,5 +1,4 @@
 import React, {useEffect, useReducer} from 'react';
-import axios from 'axios';
 import _ from 'lodash';
 import {makeStyles} from '@mui/styles/'
 import { Grid } from '@mui/material';
@@ -47,10 +46,10 @@ const TaskBoardPage = () => {
     
     useEffect(()=>{
         const fetchAllLists = async () => {
-            const result = await taskBoardService.fetchAllLists();
+            const {data} = await taskBoardService.fetchAllLists();
             taskBoardDispatch({
                 type: 'POPULATE_TASK_LISTS',
-                taskLists: result.data
+                taskLists: data
             });
         };
         fetchAllLists();

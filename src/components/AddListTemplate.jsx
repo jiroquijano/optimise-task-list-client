@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { makeStyles } from '@mui/styles';
 import { Grid } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { Input } from '@mui/material';
+import taskBoardService from '../services/taskBoardService';
+import TaskBoardContext from '../context/TaskBoardContext';
 
 const useStyles = makeStyles({
     root: {
@@ -44,6 +46,17 @@ const useStyles = makeStyles({
 const AddListTemplate = () => {
     const classes = useStyles();
     const [inputName, setInputName] = useState('');
+    const {taskBoardDispatch} = useContext(TaskBoardContext);
+    const handleAddList = async () => {
+        if(inputName){
+            const {data} = await taskBoardService.createNewList(inputName);
+            taskBoardDispatch({
+                type: 'CREATE_NEW_LIST',
+                newList: data
+            });
+            setInputName('');
+        }
+    }
     return (
         <div className={classes.root}>
             <Grid className={classes.rootGrid} container direction={'column'}>
@@ -62,7 +75,10 @@ const AddListTemplate = () => {
                     />
                 </Grid>
                 <Grid className={classes.addIconContainer} xs={10} item>
-                    <AddCircleOutlineIcon sx={{ color: '#00CCCC', fontSize: '5rem' }}/>
+                    <AddCircleOutlineIcon 
+                        sx={{ color: '#00CCCC', fontSize: '5rem' }}
+                        onClick={handleAddList}
+                    />
                 </Grid>
             </Grid>
         </div>
