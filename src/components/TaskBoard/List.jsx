@@ -69,7 +69,9 @@ const List = ({listName, tasks, id}) => {
     }
 
     const moveTaskHandler = () => {
-
+        taskBoardDispatch({
+            type: 'CLEAR_TASKS_SELECTED'
+        });
     }
 
     return (

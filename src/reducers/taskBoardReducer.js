@@ -37,6 +37,11 @@ const taskBoardReducer = (state, action) => {
                 ...state,
                 tasksSelected: state.tasksSelected.filter((task)=>task!==action.taskId)
             }
+        case 'CLEAR_TASKS_SELECTED':
+            return {
+                ...state,
+                tasksSelected: []
+            }
         case 'UPDATE_LISTS':
             return {
                 ...state,

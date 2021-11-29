@@ -55,10 +55,14 @@ const useStyles = makeStyles({
 
 
 const Task = ({id, taskName, description, deadline, state:taskState}) => {
-    const [isSelected, setSelected] = useState(false);
     const {tasksSelected, taskBoardDispatch} = useContext(TaskBoardContext);
     const classes = useStyles({taskState});
     const [isEditTaskOpen, setEditTaskOpen] = useState(false);
+    const [isSelected, setSelected] = useState(false);
+
+    useEffect(()=>{
+        setSelected(tasksSelected.includes(id));
+    },[tasksSelected, id]);
 
     const handleTaskSelection = () => {
         taskBoardDispatch({
@@ -83,7 +87,6 @@ const Task = ({id, taskName, description, deadline, state:taskState}) => {
             setEditTaskOpen(true);
         } 
     }
-
 
     useEffect(()=>{
         if(tasksSelected.includes(id)) {
