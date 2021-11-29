@@ -1,5 +1,5 @@
 import axios from 'axios';
-const taskBoardServerBaseURL = 'http://localhost:4000'
+const taskBoardServerBaseURL = process.env.TASKBOARD_SERVER_URL || 'http://localhost:4000'
 
 const taskBoardService = {
     fetchAllLists: () => {
