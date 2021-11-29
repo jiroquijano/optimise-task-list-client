@@ -38,7 +38,8 @@ const useStyles = makeStyles({
         justifyContent: 'flex-start',
         border: taskState === 'DONE' ? '1px solid #82B366' : '1px solid #D6B656',
         padding: '10px',
-        wordBreak: 'break-all',
+        wordBreak: 'break-word',
+        'text-align': 'left',
         overflowY: 'auto',
         whiteSpace:'pre-line'
     }),
@@ -78,6 +79,16 @@ const Task = ({id, taskName, description, deadline, state:taskState}) => {
             taskBoardDispatch({
                 type: 'DELETE_TASK',
                 deletedTask: task 
+            });
+        }
+    }
+    
+    const handleTaskComplete = async () => {
+        if(!isSelected) {
+            const {data:task} = await taskBoardService.completeTask(id);
+            taskBoardDispatch({
+                type: 'UPDATE_TASK',
+                updatedTask: task
             });
         }
     }
@@ -125,6 +136,7 @@ const Task = ({id, taskName, description, deadline, state:taskState}) => {
                                     fontSize: '2rem',
                                     cursor: !_.isEmpty(tasksSelected) ? 'not-allowed':'pointer'
                                 }}
+                                onClick={handleTaskComplete}
                             />
                             <EditIcon 
                                 sx={{

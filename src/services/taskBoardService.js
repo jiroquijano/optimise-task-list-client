@@ -57,9 +57,17 @@ const taskBoardService = {
     deleteTask: (taskID) => {
         try {
             const response = axios.delete(`${taskBoardServerBaseURL}/api/task/${taskID}`);
-            return response
+            return response;
         } catch (error) {
             console.log(error);
+        }
+    },
+    completeTask: (taskID) => {
+        try {
+            const response = axios.patch(`${taskBoardServerBaseURL}/api/task/complete/${taskID}`);
+            return response;
+        } catch (error) {
+            console.log(error)
         }
     }
 }

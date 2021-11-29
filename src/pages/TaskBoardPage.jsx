@@ -9,6 +9,7 @@ import TaskBoard from '../components/TaskBoard/TaskBoard';
 import TaskBoardContext from '../context/TaskBoardContext';
 import taskBoardReducer from '../reducers/taskBoardReducer';
 import taskBoardService from '../services/taskBoardService';
+import SelectionOption from '../components/SelectionOption';
 
 const useStyles = makeStyles({
     rootGrid: ({mobile}) => ({
@@ -58,6 +59,16 @@ const TaskBoardPage = () => {
         fetchAllLists();
     },[]);
 
+    const DockedContainerOptions = () => {
+        return (
+            !_.isEmpty(taskBoard.tasksSelected) ? (
+                <SelectionOption/>
+            ) : (
+                <AddListTemplate/>
+            )
+        )
+    }
+
     return (
         <TaskBoardContext.Provider value={{
             taskLists: taskBoard.taskLists,
@@ -66,7 +77,13 @@ const TaskBoardPage = () => {
         }}>
             <Grid className={classes.rootGrid} container direction={mobile ? 'column' : 'row'}>
                 <Grid className={classes.dockedContainer} xs={2} sm={3} item >
-                    {mobile ? <div>mobile</div> : <AddListTemplate/>}
+                    {
+                        mobile ? (
+                            <div>mobile</div>
+                        ):(
+                            <DockedContainerOptions/>
+                        )
+                    }
                 </Grid>
                 <Grid className={classes.taskBoardContainer} xs={10} sm={9} container item>
                     {
