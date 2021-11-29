@@ -32,16 +32,16 @@ const useStyles = makeStyles({
         fontSize: '20px',
         color: '#3B3B3B'
     },
-    taskDescription: {
+    taskDescription: ({taskState}) => ({
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        border: '1px solid #D6B656',
+        border: taskState === 'DONE' ? '1px solid #82B366' : '1px solid #D6B656',
         padding: '10px',
         wordBreak: 'break-all',
         overflowY: 'auto',
         whiteSpace:'pre-line'
-    },
+    }),
     taskFooter: {
         display: 'flex',
         alignItems: 'center',
@@ -115,20 +115,20 @@ const Task = ({id, taskName, description, deadline, state:taskState}) => {
                         </Grid>
                         <Grid item xs={5} container direction='row' justifyContent='flex-end'>
                             <Checkbox
-                                sx={{color: '#D6B656', '&.Mui-checked': {color: '#D6B656',},}}
+                                sx={{color: '#3B3B3B', '&.Mui-checked': {color: '#D6B656',},}}
                                 checked={isSelected}
                                 onChange={handleTaskSelection} //todo: add to selectedtasks via dispatch
                             />
                             <TaskIcon
                                 sx={{
-                                    color: !_.isEmpty(tasksSelected) ? '#CCCCCC':'#D6B656',
+                                    color: !_.isEmpty(tasksSelected) ? '#CCCCCC':'#3B3B3B',
                                     fontSize: '2rem',
                                     cursor: !_.isEmpty(tasksSelected) ? 'not-allowed':'pointer'
                                 }}
                             />
                             <EditIcon 
                                 sx={{
-                                    color: !_.isEmpty(tasksSelected) ? '#CCCCCC':'#D6B656',
+                                    color: !_.isEmpty(tasksSelected) ? '#CCCCCC':'#3B3B3B',
                                     fontSize: '2rem',
                                     cursor: !_.isEmpty(tasksSelected) ? 'not-allowed':'pointer'
                                 }}
@@ -136,7 +136,7 @@ const Task = ({id, taskName, description, deadline, state:taskState}) => {
                             />
                             <DeleteIcon 
                                 sx={{
-                                    color: !_.isEmpty(tasksSelected) ? '#CCCCCC':'#D6B656',
+                                    color: !_.isEmpty(tasksSelected) ? '#CCCCCC':'#3B3B3B',
                                     fontSize: '2rem',
                                     cursor: !_.isEmpty(tasksSelected) ? 'not-allowed':'pointer'
                                 }}

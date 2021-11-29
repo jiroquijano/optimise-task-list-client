@@ -1,6 +1,6 @@
 import {
     getUpdatedTaskLists,
-    getUpdatedTaskListAfterAddingTask,
+    getUpdatedTaskListAfterUpdatingTask,
     getUpdatedTaskListAfterDeletingTask
 } from '../selectors/taskBoardSelector'
 
@@ -50,7 +50,7 @@ const taskBoardReducer = (state, action) => {
         case 'UPDATE_TASK':
             return {
                 ...state,
-                taskLists: getUpdatedTaskListAfterAddingTask(state.taskLists, action.updatedTask)
+                taskLists: getUpdatedTaskListAfterUpdatingTask(state.taskLists, action.updatedTask)
             }
         case 'DELETE_TASK':
             return {
