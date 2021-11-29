@@ -21,14 +21,15 @@ const useStyles = makeStyles({
         alignItems: 'stretch'
     }),
     taskFormContainer: {
+        padding: '0px 20px'
     },
     modalHeader: {
         display: 'flex',
-        fontFamily: 'Roboto',
+        fontFamily: 'Helvetica',
         alignItems: 'center',
-        fontSize: '20px',
-        color: '#FFFFFF',
-        padding: '20px'
+        justifyContent: 'center',
+        fontSize: '24px',
+        color: '#FFFFFF'
     },
     taskFormFooter: {
         padding: '20px'
@@ -44,10 +45,10 @@ const EditTaskModal = ({isOpen, setModalOpen, task={}}) => {
         >
             <div className={classes.modalRoot}>
                 <Grid container direction='column' flexWrap='nowrap'>
-                    <Grid className={classes.modalHeader} item xs={2}>
-                        Edit Task
+                    <Grid className={classes.modalHeader} item xs={1}>
+                        <b>Edit Task</b>
                     </Grid>
-                    <Grid className={classes.taskFormContainer} container item xs={10}>
+                    <Grid className={classes.taskFormContainer} container item xs={11}>
                         <TaskForm
                             id={task.id}
                             name={task.taskName}
