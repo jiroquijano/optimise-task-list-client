@@ -63,7 +63,6 @@ const taskBoardService = {
         }
     },
     deleteMultipleTasks: (tasks) => {
-        console.log(tasks)
         try {
             const response = axios.post(`${taskBoardServerBaseURL}/api/task/delete`, {
                 tasks
