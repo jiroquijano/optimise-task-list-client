@@ -31,11 +31,22 @@ const useStyles = makeStyles({
 
 const SelectionOption = () => {
     const classes = useStyles();
-    const {taskBoardDispatch} = useContext(TaskBoardContext);
+    const {taskBoardDispatch, tasksSelected} = useContext(TaskBoardContext);
 
     const handleDeselect = () => {
         taskBoardDispatch({
             type: 'CLEAR_TASKS_SELECTED'
+        });
+    }
+
+    const handleDeleteAll = async () => {
+        const {data} = await taskBoardService.deleteMultipleTasks(tasksSelected);
+        taskBoardDispatch({
+            type: 'CLEAR_TASKS_SELECTED'
+        });
+        taskBoardDispatch({
+            type: 'UPDATE_LISTS',
+            updatedLists: data.listsUpdated
         });
     }
 
@@ -46,6 +57,7 @@ const SelectionOption = () => {
                     <Button
                         variant='contained'
                         style={{background: '#D6B656', width: '100%', margin: '5px'}}
+                        onClick={handleDeleteAll}
                     >
                         Delete Selected Tasks
                     </Button>

@@ -4,6 +4,7 @@ import { Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import TaskBoardContext from '../../context/TaskBoardContext';
 import _ from 'lodash';
 import taskBoardService from '../../services/taskBoardService';
@@ -38,7 +39,7 @@ const useStyles = makeStyles({
         background: '#CCCCCC',
         padding: '10px',
         borderRadius: '5px',
-        overflow: 'scroll'
+        overflowY: 'scroll'
     },
     listFooter:{
         display: 'flex',
@@ -46,7 +47,9 @@ const useStyles = makeStyles({
         alignItems: 'center'
     },
     moveSpiel:{
-        fontWeight: 'bold',
+        display: 'flex',
+        fontFamily: 'Roboto',
+        alignItems: 'center',
         cursor: 'pointer'
     }
 });
@@ -68,7 +71,12 @@ const List = ({listName, tasks, id}) => {
        setAddTaskOpen(true);
     }
 
-    const moveTaskHandler = () => {
+    const moveTaskHandler = async () => {
+        const {data} = await taskBoardService.moveTasks(tasksSelected, listName);
+        taskBoardDispatch({
+            type: 'UPDATE_LISTS',
+            updatedLists: data.listsUpdated
+        });
         taskBoardDispatch({
             type: 'CLEAR_TASKS_SELECTED'
         });
@@ -124,7 +132,10 @@ const List = ({listName, tasks, id}) => {
                                         onClick={moveTaskHandler} 
                                         className={classes.moveSpiel}
                                     >
-                                        Move Here
+                                        {`Move to '${listName}' list`}
+                                        <ArrowCircleRightIcon
+                                            sx={{ color: '#D6B656', fontSize: '2rem', cursor: 'pointer'}}
+                                        />
                                     </div>
                                 )
                             }

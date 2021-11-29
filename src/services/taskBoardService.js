@@ -62,9 +62,31 @@ const taskBoardService = {
             console.log(error);
         }
     },
+    deleteMultipleTasks: (tasks) => {
+        console.log(tasks)
+        try {
+            const response = axios.post(`${taskBoardServerBaseURL}/api/task/delete`, {
+                tasks
+            })
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    },
     completeTask: (taskID) => {
         try {
             const response = axios.patch(`${taskBoardServerBaseURL}/api/task/complete/${taskID}`);
+            return response;
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    moveTasks: (tasks, listName) => {
+        try {
+            const response = axios.post(`${taskBoardServerBaseURL}/api/task/move`, {
+                tasks,
+                destination: listName
+            });
             return response;
         } catch (error) {
             console.log(error)

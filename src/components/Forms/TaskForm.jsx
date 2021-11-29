@@ -48,7 +48,7 @@ const useStyles = makeStyles({
     }
 })
  
-const TaskForm = ({id, name, description, deadline, setModalOpen, action, listName}) => {
+const TaskForm = ({id, name='', description='', deadline=moment(), setModalOpen, action, listName}) => {
     const classes = useStyles();
     const [taskName, setTaskName] = useState(name);
     const [taskDescription, setTaskDescription] = useState(description);
@@ -56,7 +56,6 @@ const TaskForm = ({id, name, description, deadline, setModalOpen, action, listNa
     const {taskBoardDispatch} = useContext(TaskBoardContext);
     
     const handleAction = async () =>{
-        console.log('TASK FORM: ', {action, id, taskName, taskDescription, taskDeadline, listName});
         if(action === 'add') {
             const { data:list } = await taskBoardService.addTask({
                 name: taskName, description: taskDescription, deadline: taskDeadline

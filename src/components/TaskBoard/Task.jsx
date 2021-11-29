@@ -99,13 +99,6 @@ const Task = ({id, taskName, description, deadline, state:taskState}) => {
         } 
     }
 
-    useEffect(()=>{
-        if(tasksSelected.includes(id)) {
-            console.log(`${taskName}: I AM SELECTED!`);
-            console.log(`along with ${tasksSelected}`);
-        }
-    },[tasksSelected, id, taskName])
-
     return (
         <Grid item>
             <div className={classes.taskRoot}>
