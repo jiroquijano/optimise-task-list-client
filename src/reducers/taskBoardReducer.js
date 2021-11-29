@@ -1,8 +1,4 @@
-import {
-    getUpdatedTaskLists,
-    getUpdatedTaskListAfterUpdatingTask,
-    getUpdatedTaskListAfterDeletingTask
-} from '../selectors/taskBoardSelector'
+import taskBoardSelector from '../selectors/taskBoardSelector'
 
 /*
     state: {
@@ -45,17 +41,17 @@ const taskBoardReducer = (state, action) => {
         case 'UPDATE_LISTS':
             return {
                 ...state,
-                taskLists: getUpdatedTaskLists(state.taskLists, action.updatedLists)
+                taskLists: taskBoardSelector.getUpdatedTaskLists(state.taskLists, action.updatedLists)
             }
         case 'UPDATE_TASK':
             return {
                 ...state,
-                taskLists: getUpdatedTaskListAfterUpdatingTask(state.taskLists, action.updatedTask)
+                taskLists: taskBoardSelector.getUpdatedTaskListAfterUpdatingTask(state.taskLists, action.updatedTask)
             }
         case 'DELETE_TASK':
             return {
                 ...state,
-                taskLists: getUpdatedTaskListAfterDeletingTask(state.taskLists, action.deletedTask)
+                taskLists: taskBoardSelector.getUpdatedTaskListAfterDeletingTask(state.taskLists, action.deletedTask)
             }
         default:
             return state;
