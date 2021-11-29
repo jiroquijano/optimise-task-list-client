@@ -94,10 +94,13 @@ const List = ({listName, tasks, id}) => {
                         <Grid className={classes.listHeaderAddIconContainer} item xs={3}>
                             {
                                 _.isEmpty(tasksSelected) &&
-                                <AddCircleOutlineIcon
-                                    sx={{ color: '#D6B656', fontSize: '3rem', cursor: 'pointer'}}
-                                    onClick={addTaskHandler}
-                                />
+                                <> 
+                                    <p>Add Task</p>
+                                    <AddCircleOutlineIcon
+                                        sx={{ color: '#D6B656', fontSize: '3rem', cursor: 'pointer'}}
+                                        onClick={addTaskHandler}
+                                    />
+                                </>
                             }
                         </Grid>
                     </Grid>
@@ -123,16 +126,19 @@ const List = ({listName, tasks, id}) => {
                         <Grid container direction='row' item justifyContent='flex-end' alignItems='center'>
                             {
                                 _.isEmpty(tasksSelected) ? (
-                                    <DeleteIcon 
-                                        sx={{color: '#000000', fontSize: '3rem', cursor: 'pointer'}}
-                                        onClick={deleteListHandler}
-                                    />
+                                    <>
+                                        <p>Delete List</p>
+                                        <DeleteIcon 
+                                            sx={{color: '#000000', fontSize: '3rem', cursor: 'pointer'}}
+                                            onClick={deleteListHandler}
+                                        />
+                                    </>
                                 ):(
                                     <div
                                         onClick={moveTaskHandler} 
                                         className={classes.moveSpiel}
                                     >
-                                        {`Move to '${listName}' list`}
+                                        <p>{`Move to '${listName}' list`}</p>
                                         <ArrowCircleRightIcon
                                             sx={{ color: '#D6B656', fontSize: '2rem', cursor: 'pointer'}}
                                         />
