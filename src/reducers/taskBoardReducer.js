@@ -1,3 +1,9 @@
+import {
+    getUpdatedTaskLists,
+    getUpdatedTaskListAfterAddingTask,
+    getUpdatedTaskListAfterDeletingTask
+} from '../selectors/taskBoardSelector'
+
 /*
     state: {
         taskLists: [],
@@ -30,6 +36,21 @@ const taskBoardReducer = (state, action) => {
             return {
                 ...state,
                 tasksSelected: state.tasksSelected.filter((task)=>task!==action.taskId)
+            }
+        case 'UPDATE_LISTS':
+            return {
+                ...state,
+                taskLists: getUpdatedTaskLists(state.taskLists, action.updatedLists)
+            }
+        case 'UPDATE_TASK':
+            return {
+                ...state,
+                taskLists: getUpdatedTaskListAfterAddingTask(state.taskLists, action.updatedTask)
+            }
+        case 'DELETE_TASK':
+            return {
+                ...state,
+                taskLists: getUpdatedTaskListAfterDeletingTask(state.taskLists, action.deletedTask)
             }
         default:
             return state;

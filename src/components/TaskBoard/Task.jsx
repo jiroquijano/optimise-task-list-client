@@ -5,18 +5,20 @@ import moment from 'moment';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Checkbox from '@mui/material/Checkbox';
+import TaskIcon from '@mui/icons-material/Task';
 import TaskBoardContext from '../../context/TaskBoardContext';
-import _ from 'lodash';
 import EditTaskModal from '../Modals/EditTaskModal';
+import taskBoardService from '../../services/taskBoardService';
+import _ from 'lodash';
 
 const useStyles = makeStyles({
-    taskRoot: {
+    taskRoot: ({taskState}) => ({
         width: '25rem',
         height: '16rem',
         margin: '10px',
-        background: '#FFF2CC',
-        border: '2px solid #D6B656'
-    },
+        background: taskState === 'DONE' ? '#D5E8D4':'#FFF2CC',
+        border: taskState === 'DONE' ? '2px solid #82B366' : '2px solid #D6B656'
+    }),
     taskGridRoot: {
         height: '100%',
         padding: '10px'
@@ -47,7 +49,7 @@ const useStyles = makeStyles({
     },
     taskDeadline: ({taskState})=> ({
         display: 'flex',
-        color: taskState === 'DUE' ? 'red' : '3B3B3B'
+        color: taskState === 'DUE' ? 'red' : '#3B3B3B'
     }),
 });
 
@@ -66,16 +68,22 @@ const Task = ({id, taskName, description, deadline, state:taskState}) => {
         setSelected(!isSelected);
     }
 
+    const handleTaskDelete = async () => {
+        if(!isSelected) {
+            const {data:task} = await taskBoardService.deleteTask(id);
+            taskBoardDispatch({
+                type: 'DELETE_TASK',
+                deletedTask: task 
+            });
+        }
+    }
+
     const handleTaskEdit = () => {
         if(!isSelected){
-            console.log('Edit is allowed!');
             setEditTaskOpen(true);
         } 
     }
 
-    const handleTaskDelete = () => {
-        if(!isSelected) console.log('Delete is allowed!')
-    }
 
     useEffect(()=>{
         if(tasksSelected.includes(id)) {
@@ -89,7 +97,11 @@ const Task = ({id, taskName, description, deadline, state:taskState}) => {
             <div className={classes.taskRoot}>
                 <Grid className={classes.taskGridRoot} container direction='column'>
                     <Grid className={classes.taskName} item xs={2}>
-                        <b><i>{taskName}</i></b>
+                        <b>
+                            <i>
+                                {`${taskName} ${taskState === 'DONE' ? '(Done)' : ''}`}
+                            </i>
+                        </b>
                     </Grid>
                     <Grid className={classes.taskDescription} item xs={7}>
                         {description}
@@ -103,6 +115,13 @@ const Task = ({id, taskName, description, deadline, state:taskState}) => {
                                 sx={{color: '#D6B656', '&.Mui-checked': {color: '#D6B656',},}}
                                 checked={isSelected}
                                 onChange={handleTaskSelection} //todo: add to selectedtasks via dispatch
+                            />
+                            <TaskIcon
+                                sx={{
+                                    color: !_.isEmpty(tasksSelected) ? '#CCCCCC':'#D6B656',
+                                    fontSize: '2rem',
+                                    cursor: !_.isEmpty(tasksSelected) ? 'not-allowed':'pointer'
+                                }}
                             />
                             <EditIcon 
                                 sx={{

@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button } from '@mui/material';
 import { Input} from '@mui/material';
 import moment from 'moment';
+import taskBoardService from '../../services/taskBoardService';
+import TaskBoardContext from '../../context/TaskBoardContext';
 
 const useStyles = makeStyles({
     taskFormRoot: {
@@ -46,14 +48,32 @@ const useStyles = makeStyles({
     }
 })
  
-const TaskForm = ({id, name, description, deadline, setModalOpen, action}) => {
+const TaskForm = ({id, name, description, deadline, setModalOpen, action, listName}) => {
     const classes = useStyles();
     const [taskName, setTaskName] = useState(name);
     const [taskDescription, setTaskDescription] = useState(description);
     const [taskDeadline, setTaskDeadline] = useState(deadline);
+    const {taskBoardDispatch} = useContext(TaskBoardContext);
     
-    const handleAction = () =>{
-        console.log('TASK FORM: ', {action, id, taskName, taskDescription, taskDeadline})
+    const handleAction = async () =>{
+        console.log('TASK FORM: ', {action, id, taskName, taskDescription, taskDeadline, listName});
+        if(action === 'add') {
+            const { data:list } = await taskBoardService.addTask({
+                name: taskName, description: taskDescription, deadline: taskDeadline
+            },listName);
+            taskBoardDispatch({
+                type: 'UPDATE_LISTS',
+                updatedLists: [{...list}]
+            });
+        } else if (action === 'edit') {
+            const {data:task} = await taskBoardService.editTask({
+                id, name: taskName, description: taskDescription, deadline: taskDeadline
+            });
+            taskBoardDispatch({
+                type: 'UPDATE_TASK',
+                updatedTask: task
+            });
+        }
         setModalOpen(false);
     }
 

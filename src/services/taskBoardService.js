@@ -29,6 +29,38 @@ const taskBoardService = {
         } catch (error) {
             console.log(error);
         }
+    },
+    addTask: (task, listName) => {
+        try {
+            const response = axios.post(`${taskBoardServerBaseURL}/api/list/${listName}/newtask`, {
+                name: task.name,
+                description: task.description,
+                deadline: task.deadline
+            });
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    editTask: (task) => {
+        try {
+            const response = axios.patch(`${taskBoardServerBaseURL}/api/task/update/${task.id}`, {
+                name: task.name,
+                description: task.description,
+                deadline: task.deadline
+            });
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    deleteTask: (taskID) => {
+        try {
+            const response = axios.delete(`${taskBoardServerBaseURL}/api/task/${taskID}`);
+            return response
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 

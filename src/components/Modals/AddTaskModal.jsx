@@ -33,7 +33,7 @@ const useStyles = makeStyles({
     }
 });
 
-const AddTaskModal = ({isOpen, setModalOpen}) => {
+const AddTaskModal = ({isOpen, setModalOpen, listName}) => {
     const mobile = useMediaQuery('(max-width:600px)');
     const classes = useStyles({mobile});
     return (
@@ -46,7 +46,7 @@ const AddTaskModal = ({isOpen, setModalOpen}) => {
                         <b>Create Task</b>
                     </Grid>
                     <Grid className={classes.taskFormContainer} container item xs={11}>
-                        <TaskForm setModalOpen={setModalOpen} action='add'/>
+                        <TaskForm setModalOpen={setModalOpen} listName={listName} action='add'/>
                     </Grid>
                 </Grid>
             </div>
