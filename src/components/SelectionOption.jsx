@@ -4,24 +4,26 @@ import { Grid } from '@mui/material';
 import { Button } from '@mui/material';
 import taskBoardService from '../services/taskBoardService';
 import TaskBoardContext from '../context/TaskBoardContext';
+import { useMediaQuery } from '@mui/material';
 
 const useStyles = makeStyles({
-    root: {
+    root: ({mobile})=>({
         display: 'flex',
         height: 'auto',
         width: '80%',
-        background: '#4D4D4D',
-        border: 'dashed 2px #D6B656',
+        //background: mobile ? 'none':'#4D4D4D',
+        border: mobile ? 'none':'dashed 2px #D6B656',
         borderRadius: '5px',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: '20px'
-    },
-    rootGrid: {
+        justifyContent: mobile ? 'flex-end':'center',
+        padding: mobile ? 'none':'20px'
+    }),
+    rootGrid: ({mobile})=>({
         width: '100%',
         display: 'flex',
-        flexWrap: 'nowrap'
-    },
+        flexWrap: 'nowrap',
+        justifyContent: mobile ? 'flex-end' : 'center'
+    }),
     optionContainer: {
         display: 'flex',
         alignItems: 'center',
@@ -30,7 +32,8 @@ const useStyles = makeStyles({
 });
 
 const SelectionOption = () => {
-    const classes = useStyles();
+    const mobile = useMediaQuery('(max-width:600px)');
+    const classes = useStyles({mobile});
     const {taskBoardDispatch, tasksSelected} = useContext(TaskBoardContext);
 
     const handleDeselect = () => {
@@ -52,20 +55,20 @@ const SelectionOption = () => {
 
     return (
         <div className={classes.root}>
-            <Grid className={classes.rootGrid} container direction={'column'}>
+            <Grid className={classes.rootGrid} container direction={mobile ? 'row':'column'}>
                 <Grid className={classes.optionContainer} item>
                     <Button
                         variant='contained'
-                        style={{background: '#D6B656', width: '100%', margin: '5px'}}
+                        style={{background: '#D6B656', width: '100%', margin: mobile ? '2px':'5px'}}
                         onClick={handleDeleteAll}
                     >
-                        Delete Selected Tasks
+                        Delete Tasks
                     </Button>
                 </Grid>
                 <Grid className={classes.optionContainer} item>
                     <Button
                         variant='contained'
-                        style={{background: '#D6B656', width: '100%', margin: '5px'}}
+                        style={{background: '#D6B656', width: '100%', margin: mobile ? '2px':'5px'}}
                         onClick={handleDeselect}
                     >
                         Cancel Selection

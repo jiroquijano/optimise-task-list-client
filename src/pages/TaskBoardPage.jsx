@@ -4,12 +4,11 @@ import {makeStyles} from '@mui/styles/'
 import { Grid } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import EmptyTaskBoardSpiel from '../components/EmptyTaskBoardSpiel';
-import AddListTemplate from '../components/AddListTemplate';
 import TaskBoard from '../components/TaskBoard/TaskBoard';
 import TaskBoardContext from '../context/TaskBoardContext';
 import taskBoardReducer from '../reducers/taskBoardReducer';
 import taskBoardService from '../services/taskBoardService';
-import SelectionOption from '../components/SelectionOption';
+import DockedContainerOptions from '../components/DockedContainerOptions';
 
 const useStyles = makeStyles({
     rootGrid: ({mobile}) => ({
@@ -59,16 +58,6 @@ const TaskBoardPage = () => {
         fetchAllLists();
     },[]);
 
-    const DockedContainerOptions = () => {
-        return (
-            !_.isEmpty(taskBoard.tasksSelected) ? (
-                <SelectionOption/>
-            ) : (
-                <AddListTemplate/>
-            )
-        )
-    }
-
     return (
         <TaskBoardContext.Provider value={{
             taskLists: taskBoard.taskLists,
@@ -77,13 +66,10 @@ const TaskBoardPage = () => {
         }}>
             <Grid className={classes.rootGrid} container direction={mobile ? 'column' : 'row'}>
                 <Grid className={classes.dockedContainer} xs={2} sm={3} item >
-                    {
-                        mobile ? (
-                            <div>mobile</div>
-                        ):(
-                            <DockedContainerOptions/>
-                        )
-                    }
+                    <DockedContainerOptions
+                        mobile={mobile}
+                        tasksSelected={taskBoard.tasksSelected}
+                    />
                 </Grid>
                 <Grid className={classes.taskBoardContainer} xs={10} sm={9} container item>
                     {

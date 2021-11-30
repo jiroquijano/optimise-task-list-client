@@ -5,37 +5,37 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { Input } from '@mui/material';
 import taskBoardService from '../services/taskBoardService';
 import TaskBoardContext from '../context/TaskBoardContext';
-
+import { useMediaQuery } from '@mui/material';
 const useStyles = makeStyles({
-    root: {
+    root: ({mobile}) => ({
         display: 'flex',
-        height: '20rem',
-        width: '80%',
+        height: mobile ? '80%':'20rem',
+        width: mobile ? '100%':'80%',
         background: '#4D4D4D',
-        border: 'dashed 2px #00CCCC',
+        border: mobile ? 'none':'dashed 2px #00CCCC',
         borderRadius: '5px',
         alignItems: 'flex-start',
         justifyContent: 'center'
-    },
-    rootGrid: {
-        width: '100%',
-        display: 'flex'
-    },
-    inputContainer: {
+    }),
+    // rootGrid: {
+    //     width: '100%',
+    //     display: 'flex'
+    // },
+    inputContainer: ({mobile}) => ({
         display: 'flex',
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: mobile ? 'flex-end':'center',
         paddingTop: '10px'
-    },
-    addIconContainer: {
+    }),
+    addIconContainer: ({mobile}) => ({
         display: 'flex',
         width: 'auto',
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
-        paddingTop: '10vh'
-    },
+        paddingTop: mobile ? undefined: '10vh'
+    }),
     inputStyle: {
         '&.underline': {
             borderBottom: `2px solid white`
@@ -44,7 +44,8 @@ const useStyles = makeStyles({
 });
 
 const AddListTemplate = () => {
-    const classes = useStyles();
+    const mobile = useMediaQuery('(max-width:600px)');
+    const classes = useStyles({mobile});
     const [inputName, setInputName] = useState('');
     const {taskBoardDispatch} = useContext(TaskBoardContext);
     const handleAddList = async () => {
@@ -59,8 +60,8 @@ const AddListTemplate = () => {
     }
     return (
         <div className={classes.root}>
-            <Grid className={classes.rootGrid} container direction={'column'}>
-                <Grid className={classes.inputContainer} xs={2} item>
+            <Grid className={classes.rootGrid} container direction={ mobile ? 'row':'column'}>
+                <Grid className={classes.inputContainer} xs={10} md={2} item>
                     <Input
                         placeholder='<New List Name>'
                         sx={{color: '#FFFFFF', width: '80%', textAlign: 'center'}}
@@ -74,9 +75,9 @@ const AddListTemplate = () => {
                         }}
                     />
                 </Grid>
-                <Grid className={classes.addIconContainer} xs={10} item>
+                <Grid className={classes.addIconContainer} xs={2} md={2} item>
                     <AddCircleOutlineIcon 
-                        sx={{ color: '#00CCCC', fontSize: '5rem' }}
+                        sx={{ color: '#00CCCC', fontSize: mobile ? '3rem':'5rem' }}
                         onClick={handleAddList}
                     />
                 </Grid>
